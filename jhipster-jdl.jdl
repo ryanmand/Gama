@@ -1,0 +1,29 @@
+entity Aluno {
+  nome String required minlength(3) maxlength(100) // Nome deve ser entre 3 e 100 caracteres
+  email String required // Validação no frontend/backend
+  dataNascimento LocalDate required // Adiciona idade para melhor controle dos alunos
+  telefone String // Validação e máscara no frontend
+}
+
+entity Meta {
+  valor Integer required min(0) max(1000) // Valor entre 0 e 1000 (ENEM)
+  area AreaDoEnem required // Campo enumerado melhorado
+  descricao String maxlength(255) // Pequena descrição opcional da meta
+}
+
+enum AreaDoEnem {
+  LINGUAGENS, 
+  HUMANAS, 
+  NATUREZA, 
+  MATEMATICA
+}
+
+// Relacionamento: Um aluno pode ter várias metas
+relationship OneToMany {
+  Aluno{metas} to Meta{aluno(nome)}
+}
+
+// Melhorando CRUD: Serviço, paginação e ordenação
+service Aluno, Meta with serviceClass
+paginate Aluno, Meta with pagination
+filter Aluno, Meta // Adiciona filtros na interface
